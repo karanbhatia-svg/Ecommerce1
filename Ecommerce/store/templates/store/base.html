@@ -14,7 +14,7 @@
 
   <style>
     nav{
-      background-color: white;
+      background-color: Blue;
     }
     .one-edge-shadow {
               box-shadow: 0 8px 2px -5px rgb(246, 245, 245);
@@ -51,17 +51,37 @@
 
       <ul class=" navbar-nav my-2 my-lg-0">
         <li class="nav-item ">
+        <div class="container-fluid">
+    <form class="d-flex input-group w-auto" method="get"  >
+      <input
+        type="search"
+        class="form-control rounded"
+        name="query"
+        placeholder="Search"
+        aria-label="Search"
+        aria-describedby="search-addon"
+      />
+      <span class="input-group-text border-0" id="search-addon">
+        <i class="fas fa-search"></i>
+      </span>
+    </form>
+  </div>
+        </li>
+        <li class="nav-item ">
           <a class="nav-link" href="/cart">Cart 
             <span class="badge badge-info">{{request.session.cart.keys|length}}</span>
             <span class="sr-only">(current)</span></a>
         </li>
-        {% if request.session.customer %}
+        {% if user.is_authenticated %}
         
         <li class="nav-item ">
           <a class="nav-link" href="/orders">Orders<span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item ">
           <a class="nav-link" href="/logout">Logout<span class="sr-only">(current)</span></a>
+        </li>
+          <li class="nav-item ">
+          <a class="nav-link" href="/dashboard">Welcome, {{user.username}}<span class="sr-only">(current)</span></a>
         </li>
         {% else %}
        
@@ -95,6 +115,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
     integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
     crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/1f7863e279.js" crossorigin="anonymous"></script>
 </body>
 
 </html>

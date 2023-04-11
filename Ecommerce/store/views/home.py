@@ -2,6 +2,8 @@ from django.shortcuts import render , redirect , HttpResponseRedirect
 from store.models.product import Product
 from store.models.category import Category
 from django.views import View
+from django.db.models import Q
+from django.core.paginator import PageNotAnInteger , Paginator, EmptyPage
 
 
 # Create your views here.
@@ -43,16 +45,30 @@ def store(request):
     if not cart:
         request.session['cart'] = {}
     products = None
+    query = request.GET.get('query')
     categories = Category.get_all_categories()
     categoryID = request.GET.get('category')
     if categoryID:
-        products = Product.get_all_products_by_categoryid(categoryID)
-    else:
-        products = Product.get_all_products();
+        products = Paginator(Product.objects.filter(category=categoryID),2)
+
+    elif query:
+        products = Paginator(Product.objects.filter(name__icontains=query),2)
+
+    else :
+        products = Paginator(Product.objects.all(),2)
+    page = request.GET.get('page')
+
+    try:
+        products = products.page(page)
+    except PageNotAnInteger:
+        products = products.page(1)
+    except EmptyPage:
+        products = products.page(products.num_pages)
 
     data = {}
     data['products'] = products
     data['categories'] = categories
+
 
     print('you are : ', request.session.get('email'))
     return render(request, 'store/index.html', data)
