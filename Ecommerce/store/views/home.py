@@ -1,9 +1,11 @@
 from django.shortcuts import render , redirect , HttpResponseRedirect
+from django.urls import reverse
 from store.models.product import Product
 from store.models.category import Category
 from django.views import View
 from django.db.models import Q
 from django.core.paginator import PageNotAnInteger , Paginator, EmptyPage
+from urllib.parse import urlencode
 
 
 # Create your views here.
@@ -32,7 +34,15 @@ class Index(View):
 
         request.session['cart'] = cart
         print('cart' , request.session['cart'])
-        return redirect('homepage')
+        # get the current page number from the query string
+        current_page = request.GET.get('page')
+
+        # construct the redirect URL with the current page number
+        if current_page:
+            query_params = urlencode({'page': current_page})
+            return redirect(f"{reverse('homepage')}?{query_params}")
+        else:
+            return redirect('homepage')
 
 
 
